@@ -15,9 +15,6 @@ export class Product {
   brand: string;
 
   @Column()
-  size: string;
-
-  @Column()
   price: number;
 
   @Column()
