@@ -20,6 +20,15 @@ export class Product {
   @Column()
   price: number;
 
+  @Column()
+  image: string;
+
+  @Column()
+  quantity: number;
+
+  @Column()
+  rate: number;
+
   @Column({ nullable: true })
   discount?: number;
 }
