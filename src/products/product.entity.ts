@@ -9,9 +9,6 @@ export class Product {
   name: string;
 
   @Column()
-  description: string;
-
-  @Column()
   brand: string;
 
   @Column()
@@ -23,7 +20,7 @@ export class Product {
   @Column()
   quantity: number;
 
-  @Column()
+  @Column({ nullable: true })
   rate: number;
 
   @Column({ nullable: true })
