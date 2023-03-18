@@ -25,10 +25,7 @@ export class ProductsService {
   }
 
   update(id: number, updateProductDto: UpdateProductDto) {
-    return this.productRepository.save({
-      id,
-      ...updateProductDto,
-    });
+    return this.productRepository.update(id, { ...updateProductDto });
   }
 
   remove(id: number) {

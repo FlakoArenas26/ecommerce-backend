@@ -1,3 +1,5 @@
+import { Product } from './../products/product.entity';
+import { ProductsService } from './../products/products.service';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,10 +12,21 @@ export class ReviewsService {
   constructor(
     @InjectRepository(Review)
     private readonly reviewRepository: Repository<Review>,
+    private readonly productsService: ProductsService,
   ) {}
 
-  create(createReviewDto: CreateReviewDto) {
-    return this.reviewRepository.save(createReviewDto);
+  async create(createReviewDto: CreateReviewDto) {
+    const { productId } = createReviewDto;
+    const res = await this.reviewRepository.save(createReviewDto);
+    const reviews = await this.reviewRepository.findBy({ productId });
+    let totalRate = 0;
+    for (const review of reviews) {
+      totalRate += review.rate;
+    }
+    const averageRate = Math.floor(totalRate / reviews.length);
+    await this.productsService.update(productId, { rate: averageRate });
+
+    return res;
   }
 
   findAll(productId: number) {
