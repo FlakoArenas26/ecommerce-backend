@@ -21,11 +21,6 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.create(createProductDto);
-  }
-
-  @Post('/image')
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
@@ -40,9 +35,12 @@ export class ProductsController {
       }),
     }),
   )
-  upload(@UploadedFile() file: Express.Multer.File) {
-    return { filename: file.filename };
-    // return this.productsService.create(createProductDto);
+  create(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() createProductDto: CreateProductDto,
+  ) {
+    createProductDto.image = file.filename;
+    return this.productsService.create(createProductDto);
   }
 
   @Get()
