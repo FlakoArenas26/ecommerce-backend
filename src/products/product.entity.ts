@@ -12,6 +12,9 @@ export class Product {
   brand: string;
 
   @Column()
+  category: string;
+
+  @Column()
   price: number;
 
   @Column()
