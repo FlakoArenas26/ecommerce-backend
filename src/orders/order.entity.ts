@@ -34,15 +34,9 @@ export class Order {
   @Column()
   address: string;
 
-  @Column('text', { default: true })
+  @Column('text', { default: 'New' })
   status: string;
 
   @CreateDateColumn()
   date: Date;
-
-  @BeforeInsert()
-  beforeInsertActions() {
-    console.log('test');
-    this.status = 'New';
-  }
 }
