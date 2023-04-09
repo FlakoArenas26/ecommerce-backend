@@ -34,7 +34,7 @@ export class Order {
   @Column()
   address: string;
 
-  @Column()
+  @Column('text', { default: true })
   status: string;
 
   @CreateDateColumn()
@@ -42,6 +42,7 @@ export class Order {
 
   @BeforeInsert()
   beforeInsertActions() {
+    console.log('test');
     this.status = 'New';
   }
 }
