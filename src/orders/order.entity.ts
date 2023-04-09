@@ -1,4 +1,5 @@
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -33,6 +34,14 @@ export class Order {
   @Column()
   address: string;
 
+  @Column()
+  status: string;
+
   @CreateDateColumn()
   date: Date;
+
+  @BeforeInsert()
+  beforeInsertActions() {
+    this.status = 'New';
+  }
 }
