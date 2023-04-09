@@ -1,15 +1,25 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column('int', { array: true })
-  products: number[];
+  @Column({
+    type: 'jsonb',
+    array: false,
+    default: () => "'[]'",
+    nullable: false,
+  })
+  products: object[];
 
   @Column()
-  clientName: string;
+  name: string;
 
   @Column()
   phone: string;
@@ -22,4 +32,7 @@ export class Order {
 
   @Column()
   address: string;
+
+  @CreateDateColumn()
+  date: Date;
 }

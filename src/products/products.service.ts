@@ -20,7 +20,7 @@ export class ProductsService {
     return this.productRepository.find();
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return this.productRepository.findOneBy({ id });
   }
 
@@ -30,5 +30,15 @@ export class ProductsService {
 
   remove(id: number) {
     return this.productRepository.delete({ id });
+  }
+
+  async subtractQuantity(id: number, quantity: number) {
+    const product = await this.findOne(id);
+    const newQuantity = product.quantity - quantity;
+    if (newQuantity >= 0) {
+      this.update(id, { ...product, quantity: newQuantity });
+      return true;
+    }
+    return false;
   }
 }

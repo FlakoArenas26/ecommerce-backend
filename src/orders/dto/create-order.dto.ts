@@ -1,6 +1,6 @@
 export class CreateOrderDto {
   id: number;
-  products: number[];
+  products: object[];
   clientName: string;
   phone: string;
   country: string;
