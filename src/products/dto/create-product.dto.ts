@@ -6,4 +6,6 @@ export class CreateProductDto {
   rate?: number;
   quantity: number;
   discount?: number;
+  aboutMe: string;
+  sizes: string[];
 }

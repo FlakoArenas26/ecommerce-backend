@@ -28,4 +28,10 @@ export class Product {
 
   @Column({ nullable: true })
   discount?: number;
+
+  @Column()
+  aboutMe?: string;
+
+  @Column('text')
+  sizes: string[];
 }
