@@ -15,13 +15,15 @@ export class OrdersService {
     private readonly productService: ProductsService,
   ) {}
 
-  create(createOrderDto: CreateOrderDto) {
+  async create(createOrderDto: CreateOrderDto) {
     const { products } = createOrderDto;
+    let price = 0;
     products.forEach((p: any) => {
+      price += p.price * p.quantity;
       this.productService.subtractQuantity(+p.id, p.quantity);
     });
 
-    return this.orderRepository.save(createOrderDto);
+    return this.orderRepository.save({ ...createOrderDto, price });
   }
 
   findAll() {
@@ -33,9 +35,7 @@ export class OrdersService {
     const productIds = order.products.map((p: any) => p.id);
     let products: any = await this.productService.findByIds(productIds);
 
-    let price = 0;
     for (let i = 0; i < order.products.length; i++) {
-      price += order.products[i].price * order.products[i].quantity;
       products[i].quantity = order.products[i].quantity;
       products[i].size = order.products[i].size;
     }
@@ -46,7 +46,6 @@ export class OrdersService {
     });
 
     order.products = products;
-    order.price = price;
 
     return order;
   }

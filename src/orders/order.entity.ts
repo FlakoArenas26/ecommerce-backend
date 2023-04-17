@@ -34,6 +34,9 @@ export class Order {
   @Column()
   address: string;
 
+  @Column()
+  price: number;
+
   @Column('text', { default: 'New' })
   status: string;
 
