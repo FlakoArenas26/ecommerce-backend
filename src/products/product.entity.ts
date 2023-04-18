@@ -34,4 +34,7 @@ export class Product {
 
   @Column('text')
   sizes: string[];
+
+  @Column('numeric', { default: 0 })
+  sales: number;
 }

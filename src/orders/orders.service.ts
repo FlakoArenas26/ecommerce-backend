@@ -21,13 +21,14 @@ export class OrdersService {
     products.forEach((p: any) => {
       price += p.price * p.quantity;
       this.productService.subtractQuantity(+p.id, p.quantity);
+      this.productService.updateSales(+p.id, p.quantity);
     });
 
     return this.orderRepository.save({ ...createOrderDto, price });
   }
 
   findAll() {
-    return this.orderRepository.find();
+    return this.orderRepository.find(); 
   }
 
   async getStatistics() {

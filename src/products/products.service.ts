@@ -45,4 +45,13 @@ export class ProductsService {
     }
     return false;
   }
+
+  async updateSales(id: number, sales: number) {
+    const product = await this.findOne(id);
+    const newSales = +product.sales + sales;
+    return await this.productRepository.update(id, {
+      ...product,
+      sales: newSales,
+    });
+  }
 }
