@@ -30,6 +30,23 @@ export class OrdersService {
     return this.orderRepository.find();
   }
 
+  async getStatistics() {
+    const orders = await this.orderRepository.find();
+    let totalSales = 0;
+    let newOrders = 0;
+    let orderProcessing = 0;
+    let completedOrders = 0;
+
+    orders.forEach((order) => {
+      totalSales += order.price;
+      if (order.status === 'New') newOrders++;
+      else if (order.status === 'Packed' || order.status === 'In Transit')
+        orderProcessing++;
+      else if (order.status === 'Delivered') completedOrders++;
+    });
+
+    return { totalSales, newOrders, orderProcessing, completedOrders };
+  }
   async findOne(id: number) {
     const order: any = await this.orderRepository.findOneBy({ id });
     const productIds = order.products.map((p: any) => p.id);
