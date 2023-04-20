@@ -16,19 +16,31 @@ export class OrdersService {
   ) {}
 
   async create(createOrderDto: CreateOrderDto) {
-    const { products } = createOrderDto;
-    let price = 0;
-    products.forEach((p: any) => {
-      price += p.price * p.quantity;
-      this.productService.subtractQuantity(+p.id, p.quantity);
-      this.productService.updateSales(+p.id, p.quantity);
-    });
+    let { products } = createOrderDto;
+    let totalPrice = 0;
+    products = await Promise.all(
+      products.map(async (p: any) => {
+        const product = await this.productService.findOne(p.id);
+        p.price = product.price;
+        if (product.discount) {
+          p.price -= p.price * (product.discount / 100);
+        }
+        totalPrice += p.price * p.quantity;
+        this.productService.subtractQuantity(+p.id, p.quantity);
+        this.productService.updateSales(+p.id, p.quantity);
+        return p;
+      }),
+    );
 
-    return this.orderRepository.save({ ...createOrderDto, price });
+    return this.orderRepository.save({
+      ...createOrderDto,
+      products,
+      price: totalPrice,
+    });
   }
 
   findAll() {
-    return this.orderRepository.find(); 
+    return this.orderRepository.find();
   }
 
   async getStatistics() {
@@ -56,6 +68,7 @@ export class OrdersService {
     for (let i = 0; i < order.products.length; i++) {
       products[i].quantity = order.products[i].quantity;
       products[i].size = order.products[i].size;
+      products[i].price = order.products[i].price;
     }
 
     products = products.map((p: any) => {

@@ -34,7 +34,7 @@ export class Order {
   @Column()
   address: string;
 
-  @Column()
+  @Column('real')
   price: number;
 
   @Column('text', { default: 'New' })
